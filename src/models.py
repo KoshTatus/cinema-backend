@@ -1,7 +1,6 @@
 import datetime
-from typing import List
 
-from sqlalchemy import ForeignKey, Enum, Date, DateTime, JSON, ARRAY, String
+from sqlalchemy import ForeignKey, ARRAY, String
 from sqlalchemy.orm import Mapped, mapped_column, DeclarativeBase
 
 from enums import AgeRating
@@ -47,6 +46,7 @@ class SeatsOrm(Base):
     hall_id: Mapped[int] = mapped_column(ForeignKey("halls.id"))
     row_number: Mapped[int]
     seat_number: Mapped[int]
+    is_available: Mapped[bool]
     price: Mapped[int]
 
 class SessionsOrm(Base):
@@ -64,12 +64,6 @@ class OrdersOrm(Base):
     total_price: Mapped[int]
     info: Mapped[str]
     created_at: Mapped[datetime.datetime] = mapped_column(default=datetime.datetime.now())
-
-class OrderSeatsOrm(Base):
-    __tablename__ = "m2m_orders_seats"
-    id: Mapped[int] = mapped_column(primary_key=True)
-    order_id: Mapped[int] = mapped_column(ForeignKey("orders.id"))
-    seat_id: Mapped[int] = mapped_column(ForeignKey("seats.id"))
 
 class UsersOrm(Base):
     __tablename__ = "users"
