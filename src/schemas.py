@@ -3,7 +3,7 @@ import datetime
 from fastapi import Query
 from pydantic import BaseModel, EmailStr, Field, PositiveInt
 
-from enums import AgeRating
+from src.enums import AgeRating
 
 MIN_LENGTH_PASSWORD = 8
 MAX_LENGTH_PASSWORD = 20
@@ -37,9 +37,8 @@ class Genre(BaseModel):
 
 class Session(BaseModel):
     id: int
-    movie_title: str
-    movie_poster_url: str
-    hall_name: str
+    movie_id: int
+    hall_id: int
     start_time: datetime.datetime
 
 
@@ -65,17 +64,19 @@ class OrderCreate(BaseModel):
     session_id: int
     total_price: int
     info: str = Field(min_length=MIN_LENGTH_INFO, max_length=MAX_LENGTH_INFO)
-    info: str
 
 
-class Order(OrderCreate):
+class Order(BaseModel):
     id: int
+    user_id: int
+    session_id: int
+    total_price: int
+    info: str
     created_at: datetime.datetime
 
 
 class OrderDetailed(Order):
     seats: list[Seat]
-
 
 class SessionFilters(BaseModel):
     title: str = Field(
@@ -111,8 +112,14 @@ class UserCreate(BaseModel):
     email: str
     password_hash: str
 
-
-class User(UserCreate):
+class UserInfo(BaseModel):
     id: int
     is_admin: bool
 
+class User(UserCreate, UserInfo):
+    created_at: datetime.datetime
+
+
+class UserWithOrders(BaseModel):
+    user: User
+    orders: list[OrderDetailed]

@@ -3,7 +3,7 @@ import datetime
 from sqlalchemy import ForeignKey, ARRAY, String
 from sqlalchemy.orm import Mapped, mapped_column, DeclarativeBase
 
-from enums import AgeRating
+from src.enums import AgeRating
 
 
 class Base(DeclarativeBase):
